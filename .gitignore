@@ -1,0 +1,14 @@
+# IDE 配置
+.qtcreator/
+.vscode/
+.idea/
+*.user
+
+# 编译输出
+build/
+*.o
+*.exe
+
+# 缓存目录
+data/client_cache/
+*.log
