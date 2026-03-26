@@ -12,12 +12,7 @@
 #include <QFileInfo>
 
 #define DEBUG_LOCATION qDebug().nospace()\
-<< "[" << Q_FUNC_INFO\
-       << " @ " << QFileInfo(__FILE__).fileName() << ":" << __LINE__ << "]"
-
-namespace Ui {
-class ServerConnector;
-}
+<< "[" << Q_FUNC_INFO << " @ " << QFileInfo(__FILE__).fileName() << ":" << __LINE__ << "]"
 
 class ServerConnector : public QDialog
 {
@@ -27,10 +22,9 @@ public:
     static ServerConnector& instance();
 
     bool connectToServer(const QString& host, quint16 port);
-    void disconnect();
+    void disconnectFromServer();
     bool isConnected() const { return m_socket && m_socket->isOpen(); }
 
-    // 登录请求
     void loginRequest(const QString& username, const QString& password);
 
 signals:
@@ -38,30 +32,33 @@ signals:
     void disconnected();
     void erring(const QString& msg);
 
-    //登录响应信号
-    // void loginResponse(bool success, const QJsonObject& data);
     void loginSuccess(QString token, const UserInfo& userInfo);
 
 private slots:
     void onConnected();
     void onDisconnected();
-    void onError(QAbstractSocket::SocketError error);
-
+    void onErrorOccurred(QAbstractSocket::SocketError error);
     void onReadyRead();
 
 private:
     explicit ServerConnector(QWidget *parent = nullptr);
+    ~ServerConnector();
+
+    void cleanupSocket();
+    void doConnect(const QString& host, quint16 port);
 
     void handleLoginResponse( const Message& respMsg);
-
-    Ui::ServerConnector *ui;
 
     QTcpSocket* m_socket = nullptr;
     QString m_host;
     quint16 m_port;
+
+    QString m_pendingHost;
+    quint16 m_pendingPort;
+    bool m_pendingConnection = false;
+
     QByteArray m_buffer;
     quint32 m_expectedLength = 0;
-
     quint64 m_lastActiveTime = 0;
 
 };

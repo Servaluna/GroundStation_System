@@ -30,19 +30,23 @@ protected:
 private slots:
 
     void on_btnExecute_clicked();
-
     void on_btnObtain_clicked();
-
     void on_btnLogs_clicked();
+
+    void on_btnConnectToDevices_clicked();
+    void on_btnLogout_clicked();
+
+signals:
+    void openDeviceConnector();
+    void logoutFromMainWindow();
 
 private:
     void initUI();
+    void initButtonsByRole();
 
     Ui::MainWindow *ui;
-    UserInfo m_userInfo;
     QString m_token;
-
-
+    UserInfo m_userInfo;
 };
 
 #endif // MAINWINDOW_H

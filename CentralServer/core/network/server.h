@@ -60,7 +60,6 @@ signals:
 
 private slots:
     void onNewConnection();
-    // void onReadyRead();
     void onClientDisconnected();
     bool onStartServer();              // 启动服务器
     void onStopServer();               // 停止服务器

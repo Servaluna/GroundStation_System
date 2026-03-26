@@ -2,6 +2,7 @@
 #include "core/ui/logindialog.h"
 
 #include "core/network/serverconnector.h"
+#include "core/network/deviceconnector.h"
 
 #include <QApplication>
 #include <QMessageBox>
@@ -27,8 +28,8 @@ int main(int argc, char *argv[])
 
         qCritical() << "无法连接到服务器Centralerver localhost:8000";
         qCritical() << "请确保服务器已启动";
-        return -1;  // 直接结束程序
 
+        return -1;  // 直接结束程序
     }else {
         DEBUG_LOCATION << "=== 服务器Centralerver连接成功 ===";
     }
@@ -39,11 +40,28 @@ int main(int argc, char *argv[])
                      [&](QString token, const UserInfo& userInfo) {
 
         MainWindow* mainWindow = new MainWindow(token, userInfo);
+
+        QObject::connect(mainWindow, &MainWindow::openDeviceConnector,
+                         [&](){
+
+            DeviceConnector* deviceConnector = new DeviceConnector();
+            deviceConnector->show();
+                         });
+
+        QObject::connect(mainWindow, &MainWindow::logoutFromMainWindow,
+                         [mainWindow](){
+
+            mainWindow->close();
+            mainWindow->deleteLater();
+
+            LoginDialog* newloginDialog = new LoginDialog();
+            newloginDialog->show();
+                         });
+
         mainWindow->show();
 
         loginDialog->close();
         loginDialog->deleteLater();
-
     });
 
     loginDialog->show();

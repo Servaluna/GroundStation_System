@@ -29,8 +29,6 @@ int main(int argc, char *argv[])
         return -1;
     }
 
-    qDebug() << "服务器运行中，按 Ctrl+C 退出";
-
     QSqlDatabase db = dbManager.getDatabase();//全局可用了
     QSqlQuery query(db);
 
