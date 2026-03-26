@@ -52,7 +52,7 @@ void ServerConnector::disconnect()
     }
 }
 
-void ServerConnector::login(const QString& username, const QString& password)
+void ServerConnector::loginRequest(const QString& username, const QString& password)
 {
     if (!isConnected()) {
         emit erring("未连接到服务器");
@@ -63,19 +63,20 @@ void ServerConnector::login(const QString& username, const QString& password)
     data["username"] = username;
     data["password"] = password;
 
-    Message msg;
-    msg.type = MessageType::LoginRequest;
-    msg.data = data;
+    Message reqMsg;
+    reqMsg.type = MessageType::LoginRequest;
+    reqMsg.data = data;
 
-    sendMessage(msg);
+    sendMessage(m_socket, reqMsg);
+
     DEBUG_LOCATION << "发送登录请求:" << username
-             << "msg.type: " << msg.type
-                   << "msg.data: " << msg.data;
+             << "reqMsg.type: " << reqMsg.type
+                   << "reqMsg.data: " << reqMsg.data;
 }
 
 void ServerConnector::onConnected()
 {
-    DEBUG_LOCATION << "已连接到服务器" << m_host << ":" << m_port;
+    DEBUG_LOCATION << "客户端已连接到服务器" << m_host << ":" << m_port << "，会话：" << m_socket;
     emit connected();
 }
 
@@ -89,35 +90,67 @@ void ServerConnector::onError(QAbstractSocket::SocketError error)
 {
     QString errorMsg = m_socket->errorString();
     qCritical() << "网络错误:" << errorMsg;
+    qCritical() << "网络错误:" << error;    //有啥区别？
     emit erring(errorMsg);
 }
 
 void ServerConnector::onReadyRead()
 {
-    QByteArray data = m_socket->readAll();
-    Message msg = Message::fromByteArray(data);
+    // QByteArray data = m_socket->readAll();
+    // Message msg = Message::fromByteArray(data);
 
-    switch (msg.type) {
-    case MessageType::LoginResponse:
-    {
-        bool success = msg.data["success"].toBool();
-        if (success) {
-            emit loginResponse(true, msg.data);
-        } else {
-            QString error = msg.data["error"].toString();
-            emit loginResponse(false, QJsonObject(), error);
+    // switch (msg.type) {
+    // case MessageType::LoginResponse:
+    // {
+    //     bool success = msg.data["success"].toBool();
+    //     if (success) {
+    //         emit loginResponse(true, msg.data);
+    //     } else {
+    //         QString error = msg.data["error"].toString();
+    //         emit loginResponse(false, QJsonObject(), error);
+    //     }
+    //     break;
+    // }
+    // default:
+    //     DEBUG_LOCATION << "收到未知消息类型:" << msg.type;
+    //     break;
+    // }
+
+
+        // QByteArray data = m_socket->readAll();
+
+        // 循环处理所有（可能是多条）完整消息
+        while (true) {
+            Message msg = receiveMessage(m_socket, m_buffer, m_expectedLength);
+
+            if (!msg.isValid()) {
+                break;  // 没有完整消息，等待更多数据
+            }
+
+            // 更新活跃时间
+            m_lastActiveTime = QDateTime::currentMSecsSinceEpoch();
+            DEBUG_LOCATION << "会话：" << m_socket << "lastActiveTime:" << m_lastActiveTime;
+
+            //选择对应的处理函数
+            switch (msg.type) {
+            case MessageType::LoginResponse:
+                handleLoginResponse(msg);
+
+                DEBUG_LOCATION << "消息类型:" << msg.type;
+                break;
+
+            default:
+                DEBUG_LOCATION << "消息类型:" << msg.type;
+                break;
+            }
         }
-        break;
-    }
-    default:
-        DEBUG_LOCATION << "收到未知消息类型:" << msg.type;
-        break;
-    }
+
 }
 
-void ServerConnector::sendMessage(const Message& msg)
+void ServerConnector::handleLoginResponse(const Message& respMsg)
 {
-    if (!isConnected()) return;
-    m_socket->write(msg.toByteArray());
-    m_socket->flush();
+    QString token = respMsg.data["token"].toString();
+    UserInfo user =UserInfo::fromJson(respMsg.data["user"].toObject());
+
+    emit loginSuccess(token, user);
 }

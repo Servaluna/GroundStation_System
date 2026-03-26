@@ -21,6 +21,7 @@ SOURCES += \
 
 HEADERS += \
     # ../Common/fileprotocol.h \
+    ../Common/models.h \
     ../Common/protocol.h \
     core/database/databasemanager.h \
     core/database/models/user.h \

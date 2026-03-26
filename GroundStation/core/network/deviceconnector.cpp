@@ -16,7 +16,6 @@ void DeviceConnector::on_btnCancel_clicked()
     this -> close();
 }
 
-
 void DeviceConnector::on_btnConnect_clicked()
 {
     QString IP = ui ->lineEditIP ->text();

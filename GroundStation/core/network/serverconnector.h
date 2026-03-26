@@ -2,6 +2,7 @@
 #define SERVERCONNECTOR_H
 
 #include "../Common/protocol.h"
+#include "../Common/models.h"
 
 #include <QDialog>
 #include <QMessageBox>
@@ -30,32 +31,39 @@ public:
     bool isConnected() const { return m_socket && m_socket->isOpen(); }
 
     // 登录请求
-    void login(const QString& username, const QString& password);
+    void loginRequest(const QString& username, const QString& password);
 
 signals:
     void connected();
     void disconnected();
     void erring(const QString& msg);
-    void loginResponse(bool success, const QJsonObject& data, const QString& error = "");
+
+    //登录响应信号
+    // void loginResponse(bool success, const QJsonObject& data);
+    void loginSuccess(QString token, const UserInfo& userInfo);
 
 private slots:
-    // void on_btnCancel_clicked();
-    // void on_btnConnect_clicked();
-
     void onConnected();
     void onDisconnected();
     void onError(QAbstractSocket::SocketError error);
+
     void onReadyRead();
 
 private:
     explicit ServerConnector(QWidget *parent = nullptr);
 
+    void handleLoginResponse( const Message& respMsg);
+
     Ui::ServerConnector *ui;
-    QTcpSocket* m_socket;
+
+    QTcpSocket* m_socket = nullptr;
     QString m_host;
     quint16 m_port;
+    QByteArray m_buffer;
+    quint32 m_expectedLength = 0;
 
-    void sendMessage(const Message& msg);
+    quint64 m_lastActiveTime = 0;
+
 };
 
 #endif // SERVERCONNECTOR_H

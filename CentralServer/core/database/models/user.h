@@ -8,24 +8,7 @@
 #include <QSqlError>
 #include <QCryptographicHash>
 
-struct UserInfo {
-    int id;
-    QString username;
-    QString passwordHash;
-    QString fullName;
-    QString role;           // 'Operator', 'Engineer', 'Admin'
-    bool isActive;
-    QDateTime lastLogin;
-
-    UserInfo() : id(-1), isActive(true) {}
-
-    bool isValid() const { return id > 0; }
-
-    // 角色判断
-    bool isAdmin() const { return role == "Admin"; }
-    bool isEngineer() const { return role == "Engineer"; }
-    bool isOperator() const { return role == "Operator"; }
-};
+#include "../Common/models.h"
 
 class User
 {

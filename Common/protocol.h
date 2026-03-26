@@ -11,7 +11,6 @@
        << " at " << __FILE__ << ":" << __LINE__ << "]"
 
 // 消息类型枚举
-// 消息类型枚举（使用命名空间避免冲突）
 namespace MessageType {
 enum Type {
     Unknown = 0,
@@ -79,19 +78,19 @@ enum Code {
 class Message {
 public:
     MessageType::Type type = MessageType::Unknown;  //直接初始化默认无效
-    QJsonObject data;
     QString messageId;  //消息ID，用于请求-响应配对
     qint64 timestamp;   //时间戳
+    QJsonObject data;
 
     Message() {
-        timestamp = QDateTime::currentMSecsSinceEpoch();
         messageId = QUuid::createUuid().toString();
+        timestamp = QDateTime::currentMSecsSinceEpoch();
     }
 
     explicit Message(MessageType::Type t, const QJsonObject& d = QJsonObject())
         : type(t), data(d) {
-        timestamp = QDateTime::currentMSecsSinceEpoch();
         messageId = QUuid::createUuid().toString();
+        timestamp = QDateTime::currentMSecsSinceEpoch();
     }
 
     // 序列化为字节流
@@ -99,9 +98,9 @@ public:
     QByteArray toByteArray(bool compact = false) const {
         QJsonObject obj;
         obj["type"] = static_cast<int>(type);
-        obj["data"] = data;
         obj["messageId"] = messageId;
         obj["timestamp"] = timestamp;
+        obj["data"] = data;
 
         QJsonDocument doc(obj);
         return compact ? doc.toJson(QJsonDocument::Compact) : doc.toJson();
@@ -127,9 +126,9 @@ public:
         QJsonObject obj = doc.object();
 
         msg.type = static_cast<MessageType::Type>(obj["type"].toInt());
-        msg.data = obj["data"].toObject();
         msg.messageId = obj["messageId"].toString();
         msg.timestamp = obj["timestamp"].toInteger();
+        msg.data = obj["data"].toObject();
 
         return msg;
     }
@@ -140,12 +139,12 @@ public:
     }
 
     // 创建成功响应
-    static Message createResponse(const Message& request, const QJsonObject& result = QJsonObject()) {
+    static Message createResponse(const Message& request, const QJsonObject& responseData = QJsonObject()) {
         Message response;
         response.type = static_cast<MessageType::Type>(request.type + 1);  // 响应类型 = 请求类型+1（enum的时候注意）
         response.messageId = request.messageId;  // 使用相同的消息ID配对
-        response.data = result;
         response.data["status"] = StatusCode::Success;
+        response.data = responseData;
         return response;
     }
 
@@ -156,7 +155,7 @@ public:
         Message response;
         response.type = MessageType::Error;
         response.messageId = request.messageId;
-        response.data["originalType"] = static_cast<int>(request.type);
+        response.data["reqMsgType"] = static_cast<int>(request.type);
         response.data["status"] = code;
         response.data["error"] = errorMsg;
         return response;
@@ -170,12 +169,12 @@ inline bool sendMessage(QTcpSocket* socket, const Message& msg) {
         return false;
     }
 
-    QByteArray data = msg.toByteArray(true);  // 使用紧凑格式
+    QByteArray data = msg.toByteArray(true);  // compact紧凑格式
 
     //添加长度前缀 解决粘包问题 多客户端会出现
     QByteArray packet;
     quint32 len = data.size();
-    packet.append(reinterpret_cast<const char*>(&len), 4);
+    packet.append(reinterpret_cast<const char*>(&len), 4);//按照字节进行访问
     packet.append(data);
 
     qint64 written = socket->write(packet);
@@ -189,14 +188,15 @@ inline bool sendMessage(QTcpSocket* socket, const Message& msg) {
     return true;
 }
 
-// 内联函数：接收消息 配合长度前缀解决TCP粘包
+// 内联函数：接收消息 根据长度前缀解决TCP粘包
 inline Message receiveMessage(QTcpSocket* socket, QByteArray& buffer, quint32& expectedLength) {
     buffer.append(socket->readAll());
 
+    //while循环确保完整处理一条信息
     while (buffer.size() >= 4) {
         if (expectedLength == 0) {
-            memcpy(&expectedLength, buffer.constData(), 4);// 从缓冲区前4字节读取长度
-            buffer.remove(0, 4);
+            memcpy(&expectedLength, buffer.constData(), 4);// 从缓冲区前4字节读取长度  内存对齐问题，所以采用复制的方法而不用类型转换
+            buffer.remove(0, 4);//去掉从0位置开始4字节数据
         }
 
         if (buffer.size() >= expectedLength) {

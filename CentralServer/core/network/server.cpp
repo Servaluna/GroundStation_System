@@ -80,19 +80,6 @@ void Server::onNewConnection()
     updateClientList();
 }
 
-// void Server::onReadyRead()
-// {
-//     //得到发射信号的对象的指针socket
-//     QTcpSocket *socket = qobject_cast<QTcpSocket*>(sender());
-//     if (!socket) return;
-
-//     //读取数据
-//     QByteArray data = socket->readAll();
-//     QString message = QString::fromUtf8(data).trimmed();
-
-//     DEBUG_LOCATION << "收到客户端消息:" << message;
-// }
-
 void Server::onClientDisconnected()
 {
     QTcpSocket *socket = qobject_cast<QTcpSocket*>(sender());

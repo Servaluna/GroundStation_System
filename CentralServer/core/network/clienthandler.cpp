@@ -1,9 +1,13 @@
 #include "clienthandler.h"
 #include "../database/models/user.h"
+#include "../Common/protocol.h"
 
 ClientHandler::ClientHandler(QTcpSocket* socket , QObject *parent)
     : QObject{parent}
     ,m_socket(socket)
+    ,m_buffer()
+    ,m_expectedLength(0)
+    ,m_lastActiveTime(0)
 {
     connect(m_socket, &QTcpSocket::readyRead, this, &ClientHandler::onReadyRead);
     connect(m_socket, &QTcpSocket::disconnected, this, &ClientHandler::onDisconnected);
@@ -18,19 +22,32 @@ ClientHandler::~ClientHandler()
 
 void ClientHandler::onReadyRead()
 {
-    QByteArray data = m_socket->readAll();
+    // QByteArray data = m_socket->readAll();
 
-    // 解析消息
-    Message msg = Message::fromByteArray(data);
+    // 循环处理所有（可能是多条）完整消息
+    while (true) {
+        Message msg = receiveMessage(m_socket, m_buffer, m_expectedLength);
 
-    switch (msg.type) {
-    case MSG_LOGIN_REQUEST:
-        handleLogin(msg.data);
-        break;
+        if (!msg.isValid()) {
+            break;  // 没有完整消息，等待更多数据
+        }
 
-    default:
-        DEBUG_LOCATION << "未知消息类型:" << msg.type;
-        break;
+        // 更新活跃时间
+        m_lastActiveTime = QDateTime::currentMSecsSinceEpoch();
+        DEBUG_LOCATION << "会话：" << m_socket << "lastActiveTime:" << m_lastActiveTime;
+
+        //选择对应的处理函数
+        switch (msg.type) {
+        case MessageType::LoginRequest:
+            handleLoginRequest(msg);
+
+            DEBUG_LOCATION << "消息类型:" << msg.type;
+            break;
+
+        default:
+            DEBUG_LOCATION << "消息类型:" << msg.type;
+            break;
+        }
     }
 }
 
@@ -43,12 +60,14 @@ void ClientHandler::onDisconnected()
     this->deleteLater();
 }
 
-void ClientHandler::handleLogin(const QJsonObject& data)
+void ClientHandler::handleLoginRequest(const Message& reqMsg)
 {
+    const QJsonObject& data = reqMsg.data;
+
     QString username = data["username"].toString();
     QString password = data["password"].toString();
 
-    emit logMessage(QString("handleLogin登录请求: %1").arg(username));
+    emit logMessage(QString("handleLoginRequest登录请求: %1").arg(username));
 
     // 验证用户（调用User模型）
     UserInfo userInfo = User::authenticate(username, password);
@@ -56,7 +75,6 @@ void ClientHandler::handleLogin(const QJsonObject& data)
     QJsonObject responseData;
 
     if (userInfo.isValid()) {
-        // 登录成功
         emit logMessage(QString("登录成功: %1 (%2)").arg(username,userInfo.role));
 
         // 生成简单token（实际项目应该用JWT）
@@ -65,40 +83,29 @@ void ClientHandler::handleLogin(const QJsonObject& data)
                             .arg(userInfo.username)
                             .arg(QDateTime::currentMSecsSinceEpoch());
 
-        // 对token进行简单哈希（可选）
+        // 对token进行简单哈希
         QByteArray tokenHash = QCryptographicHash::hash(
                                    token.toUtf8(),
                                    QCryptographicHash::Sha256
                                    ).toHex();
 
+        //存入待返回信息
         responseData["token"] = QString(tokenHash);
         responseData["user"] = QJsonObject{
             {"id", userInfo.id},
             {"username", userInfo.username},
-            {"role", userInfo.role},
-            {"fullName", userInfo.fullName}
+            {"fullName", userInfo.fullName},
+            {"role", userInfo.role}
         };
 
-        sendResponse(MSG_LOGIN_RESPONSE, true, responseData);
+        m_lastActiveTime = QDateTime::currentMSecsSinceEpoch();//保存最新登录时间
+
+        Message respMsg = Message::createResponse(reqMsg, responseData);
+        sendMessage(m_socket , respMsg);
         DEBUG_LOCATION<<responseData;
+
     } else {
-        // 登录失败
         emit logMessage(QString("登录失败: %1").arg(username));
-        responseData["error"] = "用户名或密码错误";
-        sendResponse(MSG_LOGIN_RESPONSE, false, responseData);
+        Message::createErrorResponse(reqMsg,StatusCode::PermissionDenied,"用户名或密码错误");
     }
 }
-
-void ClientHandler::sendResponse(MessageType type, bool success, const QJsonObject& data)
-{
-    QJsonObject responseData = data;
-    responseData["success"] = success;
-
-    Message response;
-    response.type = type;
-    response.data = responseData;
-
-    m_socket->write(response.toByteArray());
-    m_socket->flush();
-}
-

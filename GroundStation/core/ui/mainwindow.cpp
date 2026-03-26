@@ -5,10 +5,11 @@
 << "[" << Q_FUNC_INFO\
        << " @ " << QFileInfo(__FILE__).fileName() << ":" << __LINE__ << "]"
 
-MainWindow::MainWindow(const UserInfo& userInfo, QWidget *parent)
+MainWindow::MainWindow(QString token, const UserInfo& userInfo, QWidget *parent)
     : QMainWindow(parent)
     , ui(new Ui::MainWindow)
     , m_userInfo(userInfo)
+    ,m_token(token)
 {
     ui->setupUi(this);
     initUI();

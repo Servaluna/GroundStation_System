@@ -8,10 +8,6 @@
 #include <QJsonObject>
 #include <QFileInfo>
 
-#define DEBUG_LOCATION qDebug().nospace()\
-<< "[" << Q_FUNC_INFO\
-       << " @ " << QFileInfo(__FILE__).fileName() << ":" << __LINE__ << "]"
-
 class ClientHandler : public QObject
 {
     Q_OBJECT
@@ -28,11 +24,13 @@ private slots:
     void onDisconnected();
 
 private:
-    QTcpSocket* m_socket;
+    QTcpSocket* m_socket = nullptr;
+    QByteArray m_buffer;
+    quint32 m_expectedLength = 0;
 
-    void handleLogin(const QJsonObject& data);
-    void sendResponse(MessageType type, bool success, const QJsonObject& data = QJsonObject());
+    quint64 m_lastActiveTime = 0;// 存储毫秒级时间戳,性能更高
 
+    void handleLoginRequest(const Message& reqMsg);
 };
 
 #endif // CLIENTHANDLER_H

@@ -1,8 +1,8 @@
 #ifndef LOGINDIALOG_H
 #define LOGINDIALOG_H
 
-#include "mainwindow.h"
-#include "../network/serverconnector.h"
+#include "../Common/models.h"
+// #include "../network/serverconnector.h"
 
 #include <QDialog>
 #include <QMessageBox>
@@ -24,7 +24,7 @@ public:
     UserInfo getUserInfo() const { return m_userInfo; }
 
 signals:
-    void loginSuccess(const UserInfo& userInfo);
+    // void loginSuccess(const UserInfo& userInfo);
 
 private slots:
     // 添加槽函数声明
@@ -36,7 +36,7 @@ private:
     UserInfo m_userInfo;
 
     void init();
-    void handleLoginResponse(bool success, const QJsonObject& data, const QString& error);
+    // void handleLoginResponse(bool success, const QJsonObject& data);
 };
 
 #endif // LOGINDIALOG_H
