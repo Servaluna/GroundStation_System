@@ -9,16 +9,14 @@ CONFIG += c++17
 #DEFINES += QT_DISABLE_DEPRECATED_BEFORE=0x060000    # disables all the APIs deprecated before Qt 6.0.0
 
 SOURCES += \
-    firmwaresim.cpp \
     main.cpp \
-    devicesimulator.cpp
+    ui/devicesimulator.cpp
 
 HEADERS += \
-    devicesimulator.h \
-    firmwaresim.h
+    ui/devicesimulator.h \
 
 FORMS += \
-    devicesimulator.ui
+    ui/devicesimulator.ui
 
 # Default rules for deployment.
 qnx: target.path = /tmp/$${TARGET}/bin

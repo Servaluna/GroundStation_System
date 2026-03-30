@@ -14,19 +14,17 @@ INCLUDEPATH += ../Common
 SOURCES += \
     core/database/models/user.cpp \
     core/network/clienthandler.cpp \
-    # core/network/filestorage.cpp \
     main.cpp \
     core/database/databasemanager.cpp \
     core/network/server.cpp
 
 HEADERS += \
-    # ../Common/fileprotocol.h \
+    ../Common/fileprotocol.h \
     ../Common/models.h \
     ../Common/protocol.h \
     core/database/databasemanager.h \
     core/database/models/user.h \
     core/network/clienthandler.h \
-    # core/network/filestorage.h \
     core/network/server.h
 
 FORMS += \

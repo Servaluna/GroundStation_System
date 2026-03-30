@@ -13,27 +13,21 @@ INCLUDEPATH += ../Common
 
 SOURCES += \
     core/network/deviceconnector.cpp \
-    # core/network/filetransfermanager.cpp \
     main.cpp \
-    # core/database/databasemanager.cpp \
-    # core/database/models/user.cpp \
-    core/ui/logindialog.cpp \
-    core/ui/mainwindow.cpp \
+    ui/logindialog.cpp \
+    ui/mainwindow.cpp \
     core/network/serverconnector.cpp
 
 HEADERS += \
-    # core/database/databasemanager.h \
-    # core/database/models/user.h \
     core/network/deviceconnector.h \
-    # core/network/filetransfermanager.h \
     core/ui/logindialog.h \
     core/ui/mainwindow.h \
     core/network/serverconnector.h
 
 FORMS += \
     core/network/deviceconnector.ui \
-    core/ui/logindialog.ui \
-    core/ui/mainwindow.ui \
+    ui/logindialog.ui \
+    ui/mainwindow.ui \
     core/network/serverconnector.ui
 
 # Default rules for deployment.
