@@ -1,5 +1,4 @@
 #include "serverconnector.h"
-// #include "ui_serverconnector.h"
 
 ServerConnector::ServerConnector(QWidget *parent)
     : QDialog(parent)

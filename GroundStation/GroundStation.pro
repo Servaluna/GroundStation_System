@@ -12,6 +12,10 @@ INCLUDEPATH += $$PWD/../Common
 INCLUDEPATH += ../Common
 
 SOURCES += \
+    core/localdatabase/localdao.cpp \
+    core/localdatabase/localdatabase.cpp \
+    core/localdatabase/localmodels/transferringtask.cpp \
+    core/managers/taskexecutor.cpp \
     core/network/deviceconnector.cpp \
     main.cpp \
     ui/logindialog.cpp \
@@ -19,9 +23,13 @@ SOURCES += \
     core/network/serverconnector.cpp
 
 HEADERS += \
+    core/localdatabase/localdao.h \
+    core/localdatabase/localdatabase.h \
+    core/localdatabase/localmodels/transferringtask.h \
+    core/managers/taskexecutor.h \
     core/network/deviceconnector.h \
-    core/ui/logindialog.h \
-    core/ui/mainwindow.h \
+    ui/logindialog.h \
+    ui/mainwindow.h \
     core/network/serverconnector.h
 
 FORMS += \

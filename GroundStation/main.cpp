@@ -1,5 +1,5 @@
-#include "core/ui/mainwindow.h"
-#include "core/ui/logindialog.h"
+#include "ui/mainwindow.h"
+#include "ui/logindialog.h"
 
 #include "core/network/serverconnector.h"
 #include "core/network/deviceconnector.h"
@@ -8,10 +8,6 @@
 #include <QMessageBox>
 #include <QTimer>
 #include <QEventLoop>
-
-#define DEBUG_LOCATION qDebug().nospace()\
-<< "[" << Q_FUNC_INFO\
-       << " @ " << QFileInfo(__FILE__).fileName() << ":" << __LINE__ << "]"
 
 int main(int argc, char *argv[])
 {

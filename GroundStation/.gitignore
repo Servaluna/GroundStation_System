@@ -81,6 +81,7 @@ CMakeLists.txt.user*
 .rcc/
 .uic/
 /build*/
+data/
 
 # sql相关文件
 *.sql                    # 忽略所有 .sql 文件

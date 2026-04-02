@@ -2,12 +2,12 @@
 #define LOGINDIALOG_H
 
 #include "../Common/models.h"
-// #include "../network/serverconnector.h"
 
 #include <QDialog>
 #include <QMessageBox>
 #include <QDebug>
 #include <QTimer>
+#include <QLineEdit>
 
 namespace Ui {
 class LoginDialog;
@@ -36,7 +36,6 @@ private:
     UserInfo m_userInfo;
 
     void init();
-    // void handleLoginResponse(bool success, const QJsonObject& data);
 };
 
 #endif // LOGINDIALOG_H

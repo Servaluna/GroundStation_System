@@ -11,9 +11,6 @@
 #include <QJsonObject>
 #include <QFileInfo>
 
-#define DEBUG_LOCATION qDebug().nospace()\
-<< "[" << Q_FUNC_INFO << " @ " << QFileInfo(__FILE__).fileName() << ":" << __LINE__ << "]"
-
 class ServerConnector : public QDialog
 {
     Q_OBJECT
