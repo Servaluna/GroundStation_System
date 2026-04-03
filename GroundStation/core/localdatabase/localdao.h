@@ -19,8 +19,8 @@ public:
     void clearAll();              // 清空所有任务
 
     // 查询操作
-    TransferringTask getById(int id);
-    TransferringTask getByTaskId(const QString& taskId);
+    TransferringTask getTransferringTaskById(int id);
+    TransferringTask getTransferringTaskById(const QString& taskId);
 
     QList<TransferringTask> getAll();
     QList<TransferringTask> getByStatus(TransferStatus ::Status status);

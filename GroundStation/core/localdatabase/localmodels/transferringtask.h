@@ -34,7 +34,7 @@ public:
     TransferringTask();
     explicit TransferringTask(const TaskBasicInfo& taskInfo, const FileInfo& fileInfo);
 
-    int id;                         // 自增主键
+    // int id;                         // 自增主键
     QString taskId;                 // 服务器任务ID
     QString fileId;                 // 关联的文件ID
 
@@ -51,18 +51,21 @@ public:
 
     // 传输进度
     qint64 transferredBytes;        // 已传输字节数
-    qint64 totalBytes;              // 总字节数
 
     // 状态信息
     TransferStatus ::Status status; // 本地状态
     QString currentStep;            // 当前步骤描述
-    QString errorMessage;           // 错误信息
+    QString lastError;           // 错误信息
 
     // 时间信息
     QDateTime createTime;           // 创建时间
     QDateTime startTime;            // 开始时间
     QDateTime endTime;              // 结束时间
     QDateTime lastUpdateTime;       // 最后更新时间
+
+    // qint64 transferOffset;          //当前传输偏移
+    QString localCachePath;         //本地缓存路径
+    QString localTempPath;          //临时文件路径
 
     // 辅助方法
     bool isValid() const;

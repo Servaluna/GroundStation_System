@@ -1,30 +1,31 @@
 #include "transferringtask.h"
 
 TransferringTask::TransferringTask()
-    : id(0)
-    , taskType(TaskType::Unknown)
+    : taskType(TaskType::Unknown)
     , priority(5)
     , fileSize(0)
     , transferredBytes(0)
-    , totalBytes(0)
+    // , totalBytes(0)
     , status(TransferStatus ::Pending)
 {}
 
 TransferringTask::TransferringTask(const TaskBasicInfo& taskInfo, const FileInfo& fileInfo)
-    : id(0)
-    , taskId(taskInfo.taskId)
+    : taskId(taskInfo.taskId)
     , fileId(fileInfo.fileId)
     , taskType(taskInfo.taskType)
     , description(taskInfo.description)
+
     , targetDeviceId(taskInfo.targetDeviceId)
     , priority(taskInfo.priority)
+
     , fileName(fileInfo.fileName)
     , fileSize(fileInfo.fileSize)
     , fileMd5(fileInfo.md5Hash)
+
     , transferredBytes(0)
-    , totalBytes(fileInfo.fileSize)
     , status(TransferStatus ::Pending)
     , createTime(QDateTime::currentDateTime())
+
     , lastUpdateTime(QDateTime::currentDateTime())
 {}
 
@@ -35,8 +36,8 @@ bool TransferringTask::isValid() const
 
 int TransferringTask::getProgressPercent() const
 {
-    if (totalBytes <= 0) return 0;
-    return static_cast<int>((transferredBytes * 100) / totalBytes);
+    if (fileSize <= 0) return 0;
+    return static_cast<int>((transferredBytes * 100) / fileSize);
 }
 
 QString TransferringTask::getStatusText() const
@@ -98,6 +99,8 @@ QJsonObject TransferringTask::toJson() const
     json["fileMd5"] = fileMd5;
     json["status"] = static_cast<int>(status);
     json["currentStep"] = currentStep;
+    //
+
     return json;
 }
 
@@ -117,5 +120,7 @@ TransferringTask TransferringTask::fromJson(const QJsonObject& json)
     task.currentStep = json["currentStep"].toString();
     task.createTime = QDateTime::currentDateTime();
     task.lastUpdateTime = QDateTime::currentDateTime();
+    //
+
     return task;
 }

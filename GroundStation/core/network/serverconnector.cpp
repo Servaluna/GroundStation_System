@@ -105,7 +105,7 @@ void ServerConnector::onErrorOccurred(QAbstractSocket::SocketError error)
     QString errorMsg = m_socket->errorString();
     qCritical() << "网络错误状态码:" << error;
     qCritical() << "网络错误信息:" << errorMsg;
-    emit erring(errorMsg);
+    emit errorOccurred(errorMsg);
 }
 
 void ServerConnector::onReadyRead()
@@ -141,7 +141,7 @@ void ServerConnector::onReadyRead()
 void ServerConnector::loginRequest(const QString& username, const QString& password)
 {
     if (!isConnected()) {
-        emit erring("未连接到服务器");
+        emit errorOccurred("未连接到服务器");
         return;
     }
 

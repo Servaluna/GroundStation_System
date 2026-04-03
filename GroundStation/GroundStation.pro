@@ -15,6 +15,7 @@ SOURCES += \
     core/localdatabase/localdao.cpp \
     core/localdatabase/localdatabase.cpp \
     core/localdatabase/localmodels/transferringtask.cpp \
+    core/managers/filetransfermanager.cpp \
     core/managers/taskexecutor.cpp \
     core/network/deviceconnector.cpp \
     main.cpp \
@@ -26,6 +27,7 @@ HEADERS += \
     core/localdatabase/localdao.h \
     core/localdatabase/localdatabase.h \
     core/localdatabase/localmodels/transferringtask.h \
+    core/managers/filetransfermanager.h \
     core/managers/taskexecutor.h \
     core/network/deviceconnector.h \
     ui/logindialog.h \

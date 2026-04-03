@@ -22,8 +22,8 @@ public:
     QSqlDatabase getDatabase() const { return m_db; }
 
     // 执行SQL
-    bool executeQuery(const QString& sql);
-    QSqlQuery executeQueryWithResult(const QString& sql);
+    bool executeQuery(const QString& sql);                  //返回成功失败
+    QSqlQuery executeQueryWithResult(const QString& sql);   //返回数据信息
 
     // 事务支持
     bool beginTransaction();

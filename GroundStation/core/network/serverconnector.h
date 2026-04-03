@@ -23,13 +23,19 @@ public:
     bool isConnected() const { return m_socket && m_socket->isOpen(); }
 
     void loginRequest(const QString& username, const QString& password);
+    // 请求下载文件（支持断点续传）
+    bool fileDownloadRequest(QString fileId, qint64 offset = 0);
 
 signals:
     void connected();
     void disconnected();
-    void erring(const QString& msg);
+    void errorOccurred(const QString& msg);
 
     void loginSuccess(QString token, const UserInfo& userInfo);
+    // 文件信息接收
+    void fileInfoReceived(int taskId, qint64 totalSize, const QString& md5);
+    // 文件块接收
+    void fileChunkReceived(int taskId, const QByteArray& chunkData, int chunkIndex, bool isLast);
 
 private slots:
     void onConnected();
