@@ -56,7 +56,7 @@ bool TransferringTask::isRunning() const
 
 bool TransferringTask::isFinished() const
 {
-    return status == TransferStatus ::Completed ||
+    return status == TransferStatus ::Succeeded  ||
            status == TransferStatus ::Failed ||
            status == TransferStatus ::Cancelled;
 }
@@ -79,7 +79,7 @@ void TransferringTask::setStatus(TransferStatus ::Status newStatus)
         }
     }
 
-    if (newStatus == TransferStatus ::Completed ||
+    if (newStatus == TransferStatus ::Succeeded  ||
         newStatus == TransferStatus ::Failed) {
         endTime = QDateTime::currentDateTime();
     }
@@ -98,7 +98,7 @@ QJsonObject TransferringTask::toJson() const
     json["fileSize"] = qint64(fileSize);
     json["fileMd5"] = fileMd5;
     json["status"] = static_cast<int>(status);
-    json["currentStep"] = currentStep;
+    json["steps"] = steps;
     //
 
     return json;
@@ -117,7 +117,7 @@ TransferringTask TransferringTask::fromJson(const QJsonObject& json)
     task.fileSize = json["fileSize"].toInteger();
     task.fileMd5 = json["fileMd5"].toString();
     task.status = static_cast<TransferStatus ::Status>(json["status"].toInt());
-    task.currentStep = json["currentStep"].toString();
+    task.steps =  static_cast<CurrentSteps::Steps>(json["steps"].toInt());
     task.createTime = QDateTime::currentDateTime();
     task.lastUpdateTime = QDateTime::currentDateTime();
     //

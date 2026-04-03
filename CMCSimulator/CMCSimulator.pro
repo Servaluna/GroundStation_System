@@ -1,4 +1,4 @@
-QT       += core gui
+QT       += core gui network
 
 greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 
@@ -10,13 +10,14 @@ CONFIG += c++17
 
 SOURCES += \
     main.cpp \
-    ui/devicesimulator.cpp
+    ui/mainwindow.cpp
 
 HEADERS += \
-    ui/devicesimulator.h \
+    core/FileReceiverProtocol.h \
+    ui/mainwindow.h
 
 FORMS += \
-    ui/devicesimulator.ui
+    ui/mainwindow.ui
 
 # Default rules for deployment.
 qnx: target.path = /tmp/$${TARGET}/bin
