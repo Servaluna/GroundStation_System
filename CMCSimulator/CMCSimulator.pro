@@ -9,11 +9,21 @@ CONFIG += c++17
 #DEFINES += QT_DISABLE_DEPRECATED_BEFORE=0x060000    # disables all the APIs deprecated before Qt 6.0.0
 
 SOURCES += \
+    core/filereceiver.cpp \
+    core/install/installlogger.cpp \
+    core/install/localfileinstallmethod.cpp \
+    core/installer.cpp \
     main.cpp \
     ui/mainwindow.cpp
 
 HEADERS += \
     core/FileReceiverProtocol.h \
+    core/filereceiver.h \
+    core/install/IInstallMethod.h \
+    core/install/InstallContext.h \
+    core/install/installlogger.h \
+    core/install/localfileinstallmethod.h \
+    core/installer.h \
     ui/mainwindow.h
 
 FORMS += \

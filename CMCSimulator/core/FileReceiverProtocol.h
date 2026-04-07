@@ -3,7 +3,7 @@
 
 #include <cstdint>
 
-#pragma pack(push, 1)
+// #pragma pack(push, 1)
 
 /**
  * @brief 地面站 ↔ CMC 通信协议
@@ -64,6 +64,6 @@ struct InstallResultData {
     uint8_t message[512];
 };
 
-#pragma pack(pop)
+// #pragma pack(pop)
 
 #endif // FILERECEIVERPROTOCOL_H
