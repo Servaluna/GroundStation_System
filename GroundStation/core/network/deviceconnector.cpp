@@ -1,12 +1,10 @@
 #include "deviceconnector.h"
-#include "ui_deviceconnector.h"
 
 #include <QTimer>
 #include <QDateTime>
 
-DeviceConnector::DeviceConnector(QWidget *parent)
-    : QWidget(parent)
-    , ui(new Ui::DeviceConnector)
+DeviceConnector::DeviceConnector(QObject *parent)
+    : QObject(parent)
     , m_socket(nullptr)
     , m_cmcPort(0)
     , m_isConnected(false)
@@ -14,8 +12,9 @@ DeviceConnector::DeviceConnector(QWidget *parent)
     , m_fileSize(0)
     , m_sentBytes(0)
 {
-    ui->setupUi(this);
-    this->setWindowTitle("连接设备");
+    // setAttribute(Qt::WA_DeleteOnClose);
+
+    // this->setWindowTitle("连接设备");
 
     m_socket = new QTcpSocket(this);
 
@@ -37,8 +36,6 @@ DeviceConnector::~DeviceConnector()
         m_socket->deleteLater();
     }
 }
-
-// ==================== 连接管理 ====================
 
 bool DeviceConnector::connectToCMC(const QString& ip, quint16 port)
 {
@@ -644,8 +641,6 @@ void DeviceConnector::handleInstallResult(const QByteArray& payload)
     cleanupFileTransfer();
 }
 
-// ==================== 辅助方法 ====================
-
 void DeviceConnector::cleanupFileTransfer()
 {
     if (m_currentFile) {
@@ -670,22 +665,22 @@ void DeviceConnector::cleanupFileTransfer()
 
 
 
-void DeviceConnector::on_btnCancel_clicked()
-{
-    this -> close();
-}
+// void DeviceConnector::on_btnCancel_clicked()
+// {
+//     this -> close();
+// }
 
-void DeviceConnector::on_btnConnect_clicked()
-{
-    QString IP = ui ->lineEditIP ->text();
-    QString Port = ui ->lineEditPort ->text();
+// void DeviceConnector::on_btnConnect_clicked()
+// {
+//     QString IP = ui ->lineEditIP ->text();
+//     QString Port = ui ->lineEditPort ->text();
 
-    m_socket ->connectToHost(QHostAddress(IP),Port.toUShort());
+//     m_socket ->connectToHost(QHostAddress(IP),Port.toUShort());
 
-    connect(m_socket , &QTcpSocket::connected,[this](){
-        QMessageBox::information(this,"连接提示","连接服务器成功");
-    });
-    connect(m_socket , &QTcpSocket::disconnected,[this](){
-        QMessageBox::warning(this,"连接提示","网络异常连接失败");
-    });
-}
+//     connect(m_socket , &QTcpSocket::connected,[this](){
+//         QMessageBox::information(this,"连接提示","连接服务器成功");
+//     });
+//     connect(m_socket , &QTcpSocket::disconnected,[this](){
+//         QMessageBox::warning(this,"连接提示","网络异常连接失败");
+//     });
+// }

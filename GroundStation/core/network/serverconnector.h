@@ -11,7 +11,7 @@
 #include <QJsonObject>
 #include <QFileInfo>
 
-class ServerConnector : public QDialog
+class ServerConnector : public QObject
 {
     Q_OBJECT
 
@@ -20,7 +20,7 @@ public:
 
     bool connectToServer(const QString& host, quint16 port);
     void disconnectFromServer();
-    bool isConnected() const { return m_socket && m_socket->isOpen(); }
+    bool isConnected() const { return m_socket && m_socket->state() == QAbstractSocket::ConnectedState; }
 
 
     void loginRequest(const QString& username, const QString& password);
@@ -46,7 +46,7 @@ private slots:
     void onReadyRead();
 
 private:
-    explicit ServerConnector(QWidget *parent = nullptr);
+    explicit ServerConnector(QObject *parent = nullptr);
     ~ServerConnector();
 
     void cleanupSocket();

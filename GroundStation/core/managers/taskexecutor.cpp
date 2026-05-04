@@ -253,7 +253,7 @@ void TaskExecutor::onDownloadFinished(QString taskId, const QString& localPath, 
 
     if (success) {
         qDebug() << "Download completed for task:" << taskId << ", file:" << localPath;
-        updateLocalTaskStatus(taskId, TransferStatus::Downloaded, CurrentSteps::);
+        updateLocalTaskStatus(taskId, TransferStatus::Downloading, CurrentSteps::Steps);
 
         // 停止速度计算
         m_speedUpdateTimer->stop();

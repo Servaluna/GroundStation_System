@@ -146,7 +146,7 @@
           </sizepolicy>
          </property>
          <property name="text">
-          <string>获取(&amp;O)</string>
+          <string>库(&amp;P)</string>
          </property>
         </widget>
        </item>
@@ -195,7 +195,7 @@
        <enum>Qt::ContextMenuPolicy::DefaultContextMenu</enum>
       </property>
       <property name="currentIndex">
-       <number>0</number>
+       <number>1</number>
       </property>
       <widget class="QWidget" name="pageExecute">
        <property name="autoFillBackground">
@@ -204,9 +204,9 @@
        <layout class="QHBoxLayout" name="horizontalLayout_5" stretch="1,6">
         <item>
          <widget class="QWidget" name="widget" native="true">
-          <layout class="QVBoxLayout" name="verticalLayout_2" stretch="1,1,3,1,1,1,1,4">
+          <layout class="QVBoxLayout" name="verticalLayout_2" stretch="1,1,3,1,1,2,1,1,4">
            <item>
-            <widget class="QLabel" name="label">
+            <widget class="QLabel" name="label_networkConnection">
              <property name="text">
               <string>网络连接状态</string>
              </property>
@@ -250,7 +250,7 @@
             </spacer>
            </item>
            <item>
-            <widget class="QLabel" name="label_4">
+            <widget class="QLabel" name="label_username">
              <property name="text">
               <string>账户</string>
              </property>
@@ -260,7 +260,7 @@
             </widget>
            </item>
            <item>
-            <widget class="QLabel" name="label_5">
+            <widget class="QLabel" name="label_role">
              <property name="text">
               <string>身份</string>
              </property>
@@ -281,6 +281,19 @@
               </size>
              </property>
             </spacer>
+           </item>
+           <item>
+            <widget class="QPushButton" name="btn_CreateBatch">
+             <property name="sizePolicy">
+              <sizepolicy hsizetype="Minimum" vsizetype="Expanding">
+               <horstretch>0</horstretch>
+               <verstretch>0</verstretch>
+              </sizepolicy>
+             </property>
+             <property name="text">
+              <string>创建升级任务</string>
+             </property>
+            </widget>
            </item>
            <item>
             <widget class="QPushButton" name="btnLogout">
@@ -316,61 +329,27 @@
           <layout class="QVBoxLayout" name="verticalLayout_3" stretch="5,1">
            <item>
             <widget class="QWidget" name="widget_7" native="true">
-             <widget class="QTreeWidget" name="treeWidget">
-              <property name="geometry">
-               <rect>
-                <x>30</x>
-                <y>20</y>
-                <width>381</width>
-                <height>131</height>
-               </rect>
-              </property>
-              <column>
-               <property name="text">
-                <string>1</string>
-               </property>
-              </column>
-              <column>
-               <property name="text">
-                <string>2</string>
-               </property>
-              </column>
-              <column>
-               <property name="text">
-                <string>3</string>
-               </property>
-              </column>
-              <column>
-               <property name="text">
-                <string>4</string>
-               </property>
-              </column>
+             <layout class="QVBoxLayout" name="verticalLayout_5">
               <item>
-               <property name="text">
-                <string>1.1</string>
-               </property>
-              </item>
-              <item>
-               <property name="text">
-                <string>1.2</string>
-               </property>
-               <item>
-                <property name="text">
-                 <string>1.2.1</string>
+               <widget class="QTableWidget" name="tableTask">
+                <property name="alternatingRowColors">
+                 <bool>true</bool>
                 </property>
-                <item>
-                 <property name="text">
-                  <string>1,2,1,1</string>
-                 </property>
-                </item>
-               </item>
+                <property name="selectionMode">
+                 <enum>QAbstractItemView::SelectionMode::SingleSelection</enum>
+                </property>
+                <property name="selectionBehavior">
+                 <enum>QAbstractItemView::SelectionBehavior::SelectRows</enum>
+                </property>
+                <property name="gridStyle">
+                 <enum>Qt::PenStyle::DashLine</enum>
+                </property>
+                <attribute name="verticalHeaderVisible">
+                 <bool>false</bool>
+                </attribute>
+               </widget>
               </item>
-              <item>
-               <property name="text">
-                <string>1.3</string>
-               </property>
-              </item>
-             </widget>
+             </layout>
             </widget>
            </item>
            <item>
@@ -415,46 +394,44 @@
         </item>
        </layout>
       </widget>
-      <widget class="QWidget" name="pageObtain">
-       <widget class="QWidget" name="layoutWidget">
+      <widget class="QWidget" name="pagePackages">
+       <widget class="QWidget" name="widget_5" native="true">
         <property name="geometry">
          <rect>
-          <x>0</x>
-          <y>-10</y>
-          <width>651</width>
-          <height>381</height>
+          <x>1</x>
+          <y>-9</y>
+          <width>108</width>
+          <height>379</height>
          </rect>
         </property>
-        <layout class="QHBoxLayout" name="horizontalLayout_4" stretch="1,5">
-         <property name="spacing">
-          <number>0</number>
+       </widget>
+       <widget class="QWidget" name="widget_6" native="true">
+        <property name="geometry">
+         <rect>
+          <x>109</x>
+          <y>-9</y>
+          <width>541</width>
+          <height>379</height>
+         </rect>
+        </property>
+        <widget class="QLabel" name="label_6">
+         <property name="geometry">
+          <rect>
+           <x>250</x>
+           <y>100</y>
+           <width>91</width>
+           <height>111</height>
+          </rect>
          </property>
-         <item>
-          <widget class="QWidget" name="widget_5" native="true"/>
-         </item>
-         <item>
-          <widget class="QWidget" name="widget_6" native="true">
-           <widget class="QLabel" name="label_6">
-            <property name="geometry">
-             <rect>
-              <x>250</x>
-              <y>100</y>
-              <width>91</width>
-              <height>111</height>
-             </rect>
-            </property>
-            <property name="font">
-             <font>
-              <pointsize>37</pointsize>
-             </font>
-            </property>
-            <property name="text">
-             <string>获取</string>
-            </property>
-           </widget>
-          </widget>
-         </item>
-        </layout>
+         <property name="font">
+          <font>
+           <pointsize>37</pointsize>
+          </font>
+         </property>
+         <property name="text">
+          <string>获取</string>
+         </property>
+        </widget>
        </widget>
       </widget>
       <widget class="QWidget" name="pageLogs">

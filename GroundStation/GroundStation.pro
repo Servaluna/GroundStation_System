@@ -12,30 +12,37 @@ INCLUDEPATH += $$PWD/../Common
 INCLUDEPATH += ../Common
 
 SOURCES += \
+    app/appcontroller.cpp \
     core/localdatabase/localdao.cpp \
     core/localdatabase/localdatabase.cpp \
     core/localdatabase/localmodels/transferringtask.cpp \
     core/managers/filetransfermanager.cpp \
     core/managers/taskexecutor.cpp \
     core/network/deviceconnector.cpp \
+    core/session/sessionmanager.cpp \
     main.cpp \
+    ui/deviceconnectorwindow.cpp \
     ui/logindialog.cpp \
     ui/mainwindow.cpp \
     core/network/serverconnector.cpp
 
 HEADERS += \
+    app/appcontroller.h \
     core/localdatabase/localdao.h \
     core/localdatabase/localdatabase.h \
     core/localdatabase/localmodels/transferringtask.h \
     core/managers/filetransfermanager.h \
     core/managers/taskexecutor.h \
     core/network/deviceconnector.h \
+    core/session/sessionmanager.h \
+    ui/deviceconnectorwindow.h \
     ui/logindialog.h \
     ui/mainwindow.h \
     core/network/serverconnector.h
 
 FORMS += \
     core/network/deviceconnector.ui \
+    ui/deviceconnectorwindow.ui \
     ui/logindialog.ui \
     ui/mainwindow.ui \
     core/network/serverconnector.ui

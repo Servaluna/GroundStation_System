@@ -40,7 +40,7 @@ bool LocalDAO::insert(const TransferringTask& task)
     query.bindValue(":file_md5", task.fileMd5);
     query.bindValue(":transferred_bytes", qint64(task.transferredBytes));
     query.bindValue(":status", static_cast<int>(task.status));
-    query.bindValue(":current_step", task.currentStep);
+    query.bindValue(":current_step", task.steps);
     query.bindValue(":error_message", task.lastError);
     query.bindValue(":create_time", task.createTime.toSecsSinceEpoch());
     query.bindValue(":start_time", task.startTime.toSecsSinceEpoch());
@@ -89,7 +89,7 @@ bool LocalDAO::update(const TransferringTask& task)
     query.bindValue(":file_md5", task.fileMd5);
     query.bindValue(":transferred_bytes", qint64(task.transferredBytes));
     query.bindValue(":status", static_cast<int>(task.status));
-    query.bindValue(":current_step", task.currentStep);
+    query.bindValue(":current_step", task.steps);
     query.bindValue(":last_error", task.lastError);
     query.bindValue(":start_time", task.startTime.toSecsSinceEpoch());
     query.bindValue(":end_time", task.endTime.toSecsSinceEpoch());
@@ -317,7 +317,7 @@ TransferringTask LocalDAO::rowToTask(const QSqlQuery& query)
     task.fileMd5 = query.value("file_md5").toString();
     task.transferredBytes = query.value("transferred_bytes").toLongLong();
     task.status = static_cast<TransferStatus::Status>(query.value("status").toInt());
-    task.currentStep = query.value("current_step").toString();
+    task.steps = query.value("current_step").toString();
     task.lastError = query.value("error_message").toString();
 
     qint64 createTime = query.value("create_time").toLongLong();

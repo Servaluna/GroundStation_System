@@ -9,6 +9,9 @@ LoginDialog::LoginDialog(QWidget *parent)
 {
     ui->setupUi(this);
 
+    setAttribute(Qt::WA_DeleteOnClose);
+
+
     init();
 }
 
@@ -24,6 +27,18 @@ void LoginDialog::init()
 
     ui->editUsername->setFocus();
     ui->editPassword->setEchoMode(QLineEdit::Password);
+
+    // 连接信号
+    connect(&ServerConnector::instance(), &ServerConnector::loginSuccess, this, [this](QString token, const UserInfo& userInfo){
+        m_userInfo = userInfo;
+        accept();
+    });
+
+    connect(&ServerConnector::instance(), &ServerConnector::errorOccurred, this, [this](const QString& msg){
+        QMessageBox::critical(this, "错误", msg);
+        ui->btnLogin->setEnabled(true);
+        ui->btnLogin->setText("登录");
+    });
 }
 
 

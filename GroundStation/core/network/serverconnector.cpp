@@ -1,7 +1,7 @@
 #include "serverconnector.h"
 
-ServerConnector::ServerConnector(QWidget *parent)
-    : QDialog(parent)
+ServerConnector::ServerConnector(QObject *parent)
+    : QObject(parent)
     ,m_socket(nullptr)
 {
     m_socket = new QTcpSocket(this);
@@ -126,12 +126,19 @@ void ServerConnector::onReadyRead()
             switch (msg.type) {
             case MessageType::LoginResponse:
                 handleLoginResponse(msg);
-
                 DEBUG_LOCATION << "消息类型:" << msg.type;
                 break;
 
+            case MessageType::Error: {
+                QString errorMsg = msg.data["error"].toString();
+                if (errorMsg.isEmpty()) errorMsg = "未知服务器错误";
+                emit errorOccurred(errorMsg);
+                break;
+            }
+
+
             default:
-                DEBUG_LOCATION << "消息类型:" << msg.type;
+                DEBUG_LOCATION << "未处理的消息类型:" << msg.type;
                 break;
             }
         }

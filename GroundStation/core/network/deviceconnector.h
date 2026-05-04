@@ -1,31 +1,27 @@
 #ifndef DEVICECONNECTOR_H
 #define DEVICECONNECTOR_H
 
-#include <QWidget>
+#include <QObject>
 #include <QTcpSocket>
 #include <QMessageBox>
 #include <QFile>
-
-namespace Ui {
-class DeviceConnector;
-}
 
 struct DeviceStatus {
     QString deviceId;      // 设备ID
     QString deviceName;    // 设备名称
     bool isOnline;         // 是否在线
-    QString version;       // 当前版本（可选）
+    QString version;       // 当前版本
     QString lastUpdateTime;// 最后更新时间
 
     DeviceStatus() : isOnline(false) {}
 };
 
-class DeviceConnector : public QWidget
+class DeviceConnector : public QObject
 {
     Q_OBJECT
 
 public:
-    explicit DeviceConnector(QWidget *parent = nullptr);
+    explicit DeviceConnector(QObject *parent = nullptr);
     ~DeviceConnector();
 
     bool connectToCMC(const QString& ip, quint16 port);
@@ -57,6 +53,7 @@ private slots:
     void onDisconnected();
     void onErrorOccurred(QAbstractSocket::SocketError socketError);
     void onReadyRead();
+
     void onSendFileData();
 
     void on_btnCancel_clicked();
@@ -106,7 +103,6 @@ private:
     void updateDeviceStatus(const DeviceStatus& status, bool isFullUpdate);
 
 private:
-    Ui::DeviceConnector *ui;
     QTcpSocket* m_socket;
     QString m_cmcIp;
     quint16 m_cmcPort;

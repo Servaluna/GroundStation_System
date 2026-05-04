@@ -106,6 +106,7 @@ void ClientHandler::handleLoginRequest(const Message& reqMsg)
 
     } else {
         emit logMessage(QString("登录失败: %1").arg(username));
-        Message::createErrorResponse(reqMsg,StatusCode::PermissionDenied,"用户名或密码错误");
+        Message errorMsg = Message::createErrorResponse(reqMsg,StatusCode::PermissionDenied,"用户名或密码错误");
+        sendMessage(m_socket, errorMsg);
     }
 }
