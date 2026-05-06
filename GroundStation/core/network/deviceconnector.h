@@ -56,9 +56,6 @@ private slots:
 
     void onSendFileData();
 
-    void on_btnCancel_clicked();
-    void on_btnConnect_clicked();
-
 private:
     // ========== 协议定义 ==========
 
@@ -100,7 +97,6 @@ private:
     // ========== 辅助方法 ==========
 
     void cleanupFileTransfer();
-    void updateDeviceStatus(const DeviceStatus& status, bool isFullUpdate);
 
 private:
     QTcpSocket* m_socket;

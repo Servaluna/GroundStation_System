@@ -1,7 +1,7 @@
 #ifndef TRANSFERRINGTASK_H
 #define TRANSFERRINGTASK_H
 
-#include "../Common/models.h"
+#include "models.h"
 #include <QString>
 #include <QSqlRecord>
 

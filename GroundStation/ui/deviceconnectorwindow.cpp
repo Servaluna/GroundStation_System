@@ -4,6 +4,7 @@
 deviceconnectorwindow::deviceconnectorwindow(QWidget *parent)
     : QWidget(parent)
     , ui(new Ui::deviceconnectorwindow)
+    , m_socket(new QTcpSocket(this))
 {
     ui->setupUi(this);
     setAttribute(Qt::WA_DeleteOnClose);

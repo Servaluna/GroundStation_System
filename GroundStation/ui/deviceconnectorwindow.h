@@ -23,6 +23,7 @@ private slots:
 
 private:
     Ui::deviceconnectorwindow *ui;
+    QTcpSocket* m_socket = nullptr;
 };
 
 #endif // DEVICECONNECTORWINDOW_H

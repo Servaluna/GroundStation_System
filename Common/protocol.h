@@ -2,9 +2,12 @@
 #define PROTOCOL_H
 
 #include <QByteArray>
+#include <QDateTime>
+#include <QDebug>
 #include <QJsonDocument>
 #include <QJsonObject>
 #include <QTcpSocket>
+#include <QUuid>
 
 #define DEBUG_LOCATION qDebug().nospace() \
 << "[" << Q_FUNC_INFO \

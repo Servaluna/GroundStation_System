@@ -1,6 +1,6 @@
 #include "clienthandler.h"
 #include "../database/models/user.h"
-#include "../Common/protocol.h"
+#include "protocol.h"
 
 ClientHandler::ClientHandler(QTcpSocket* socket , QObject *parent)
     : QObject{parent}

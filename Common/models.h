@@ -1,7 +1,8 @@
 #ifndef MODELS_H
 #define MODELS_H
 
-#include "qjsonobject.h"
+#include <QJsonObject>
+#include <QMetaType>
 
 #include <QString>
 #include <QDateTime>
@@ -412,5 +413,7 @@ struct TaskBasicInfo {
         return json;
     }
 };
+
+Q_DECLARE_METATYPE(TaskBasicInfo)
 
 #endif // MODELS_H
